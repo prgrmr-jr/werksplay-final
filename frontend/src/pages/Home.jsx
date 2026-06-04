@@ -11,9 +11,34 @@ export default function Home() {
     const {data: matches, loading: mLoad} = useMatches("Approved");
     const {data: quests, loading: qLoad} = useSideQuests();
 
-    const top3 = lb.slice(0, 3);
-    const latest3m = matches.slice(0, 3);
-    const latest3q = quests.slice(0, 3);
+    // Only show players with activity
+    const top3 = lb
+        .filter(
+            (player) =>
+                player.total_points > 0 ||
+                player.matches_played > 0 ||
+                player.wins > 0 ||
+                player.losses > 0
+        )
+        .slice(0, 3);
+
+// Only show actual approved matches with participants
+    const latest3m = matches
+        .filter(
+            (match) =>
+                match.participants &&
+                match.participants.length > 0
+        )
+        .slice(0, 3);
+
+// Only show completed / approved side quests
+    const latest3q = quests
+        .filter(
+            (quest) =>
+                quest.status === "Completed" ||
+                quest.status === "Approved"
+        )
+        .slice(0, 3);
 
     return (
         <div className="space-y-14">
@@ -54,6 +79,12 @@ export default function Home() {
 
                 {lbLoading ? (
                     <Spinner/>
+                ) : top3.length === 0 ? (
+                    <div className="card-cyan text-center py-10">
+                        <p className="text-white/40">
+                            No rankings available yet.
+                        </p>
+                    </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         {top3.map((row) => (
@@ -92,7 +123,7 @@ export default function Home() {
                                     {row.nickname}
                                 </div>
 
-                                <div className="text-gold font-game font-bold text-2xl text-glow-gold mt-1">
+                                <div className="text-gold font-game font-bold text-2xl mt-1">
                                     {row.total_points.toLocaleString()}
                                 </div>
 
@@ -101,13 +132,13 @@ export default function Home() {
                                 </div>
 
                                 <div className="flex justify-center gap-4 mt-3 text-xs">
-                                    <span className="text-green-400">
-                                        W: {row.wins}
-                                    </span>
+                        <span className="text-green-400">
+                            W: {row.wins}
+                        </span>
 
                                     <span className="text-red-400">
-                                        L: {row.losses}
-                                    </span>
+                            L: {row.losses}
+                        </span>
                                 </div>
                             </Link>
                         ))}
@@ -132,6 +163,12 @@ export default function Home() {
 
                 {mLoad ? (
                     <Spinner/>
+                ) : latest3m.length === 0 ? (
+                    <div className="card-cyan text-center py-10">
+                        <p className="text-white/40">
+                            No matches submitted yet.
+                        </p>
+                    </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {latest3m.map((m) => (
@@ -158,6 +195,12 @@ export default function Home() {
 
                 {qLoad ? (
                     <Spinner/>
+                ) : latest3q.length === 0 ? (
+                    <div className="card-cyan text-center py-10">
+                        <p className="text-white/40">
+                            No side quests completed yet.
+                        </p>
+                    </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {latest3q.map((q) => (

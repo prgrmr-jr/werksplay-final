@@ -1,3 +1,3 @@
 import api from "./axios";
 
-export const getLeaderboard = (limit = 50) => api.get("/leaderboard/", { params: { limit } });
+export const getLeaderboard = (limit = 500) => api.get("/leaderboard/", {params: {limit}});

@@ -123,12 +123,22 @@ REST_FRAMEWORK = {
 }
 
 # ── CORS ──────────────────────────────────────────────────────────────────────
-CORS_ALLOWED_ORIGINS = config("CORS_ALLOWED_ORIGINS", default="localhost,127.0.0.1").split(",")
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://werksplay.opswerks.space",
+    "http://werksplay.opswerks.space"
+]
 CORS_ALLOW_CREDENTIALS = True
 
 # ── CSRF ──────────────────────────────────────────────────────────────────────
 # Trust the Vite dev server so credentialed POST/PATCH/DELETE requests work.
-CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default="localhost,127.0.0.1").split(",")
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://werksplay.opswerks.space",
+    "http://werksplay.opswerks.space"
+]
 # Must be False so the JS axios interceptor can read the cookie value.
 CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SAMESITE = "Lax"
