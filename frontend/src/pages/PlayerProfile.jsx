@@ -37,54 +37,74 @@ export default function PlayerProfile() {
         <div className="space-y-8">
 
             {/* HEADER */}
-            <div className="card-cyan flex flex-col sm:flex-row gap-6 items-start sm:items-center">
+            <div className="card-cyan relative overflow-hidden">
 
-                {/* Avatar */}
-                <div className="w-24 h-24 rounded-full overflow-hidden border border-cyan/30 shrink-0">
-                    {player.photo ? (
-                        <img
-                            src={player.photo}
-                            className="w-full h-full object-cover"
-                            alt={player.nickname}
-                        />
-                    ) : (
+                <div
+                    className="absolute inset-0 bg-gradient-to-r from-cyan/5 via-transparent to-gold/5 pointer-events-none"/>
+
+                <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start gap-5">
+
+                    {/* Avatar */}
+                    <div className="relative shrink-0">
+                        <div className="absolute inset-0 bg-cyan/20 blur-xl rounded-full"/>
+
                         <div
-                            className="w-full h-full flex items-center justify-center text-cyan font-game font-bold text-2xl">
-                            {player.nickname?.[0]?.toUpperCase()}
+                            className="relative w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 border-cyan/30">
+                            {player.photo ? (
+                                <img
+                                    src={player.photo}
+                                    alt={player.nickname}
+                                    className="w-full h-full object-cover"
+                                />
+                            ) : (
+                                <div
+                                    className="w-full h-full flex items-center justify-center text-cyan font-game font-bold text-3xl">
+                                    {player.nickname?.[0]?.toUpperCase()}
+                                </div>
+                            )}
                         </div>
-                    )}
-                </div>
+                    </div>
 
-                {/* Info */}
-                <div className="flex-1 min-w-0 space-y-1">
-                    <h1 className="font-game font-bold text-2xl text-white uppercase tracking-wider">
-                        {player.nickname}
-                    </h1>
+                    {/* Player Info */}
+                    <div className="flex-1 min-w-0 text-center md:text-left">
 
-                    <p className="text-white/40 text-sm">{player.fullname}</p>
+                        <h1 className="font-game font-bold text-2xl md:text-3xl text-white uppercase truncate">
+                            {player.nickname}
+                        </h1>
 
-                    {player.department && (
-                        <span
-                            className="inline-block px-3 py-1 rounded-full bg-purple/10 border border-purple/20 text-purple text-xs">
-              {player.department}
-            </span>
-                    )}
-
-                    {player.bio && (
-                        <p className="text-white/60 text-sm max-w-xl mt-2">
-                            {player.bio}
+                        <p className="text-white/50 text-sm mt-1">
+                            {player.fullname}
                         </p>
-                    )}
-                </div>
 
-                {/* Points */}
-                <div className="shrink-0 text-right">
-                    <div className="text-gold font-game font-bold text-3xl">
-                        {stats.total_points.toLocaleString()}
+                        {player.department && (
+                            <div className="mt-3">
+                    <span
+                        className="inline-flex items-center px-3 py-1 rounded-full bg-purple/10 border border-purple/20 text-purple text-xs">
+                        {player.department}
+                    </span>
+                            </div>
+                        )}
+
+                        {player.bio && (
+                            <p className="mt-3 text-sm text-white/60 max-w-xl">
+                                {player.bio}
+                            </p>
+                        )}
                     </div>
-                    <div className="text-white/30 text-xs uppercase tracking-wider">
-                        Total Points
+
+                    {/* Points */}
+                    <div className="text-center md:text-right shrink-0">
+
+                        <div className="text-gold font-game font-bold text-4xl md:text-5xl">
+                            {stats.total_points.toLocaleString()}
+                        </div>
+
+                        <div className="text-white/40 text-xs uppercase tracking-widest">
+                            Total Points
+                        </div>
+
                     </div>
+
                 </div>
             </div>
 

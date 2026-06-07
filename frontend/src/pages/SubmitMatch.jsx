@@ -27,7 +27,7 @@ function useManilaTime() {
 
 export default function SubmitMatch() {
     const navigate = useNavigate();
-
+    const [showGuide, setShowGuide] = useState(false);
     const [games, setGames] = useState([]);
     const [players, setPlayers] = useState([]);
     const [gameId, setGameId] = useState("");
@@ -171,6 +171,136 @@ export default function SubmitMatch() {
                 <p className="text-white/40 text-sm mt-2">
                     Submit a completed match for review and approval.
                 </p>
+
+                <button
+                    type="button"
+                    onClick={() => setShowGuide(true)}
+                    className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-cyan/30 bg-cyan/10 text-cyan hover:bg-cyan/20 transition"
+                >
+                    How to Submit a Match
+                </button>
+                {showGuide && (
+                    <div className="space-y-4">
+
+                        <div className="rounded-xl border border-cyan/20 bg-cyan/5 p-4">
+                            <h3 className="font-game text-cyan font-bold mb-2">
+                                🎯 Before You Start
+                            </h3>
+                            <p className="text-white/70 text-sm">
+                                Make sure the match has already ended and you have a photo or screenshot
+                                showing the final result.
+                            </p>
+                        </div>
+
+                        <div className="space-y-3">
+
+                            <div className="flex gap-3">
+                                <div
+                                    className="w-7 h-7 rounded-full bg-cyan/20 text-cyan flex items-center justify-center text-sm font-bold shrink-0">
+                                    1
+                                </div>
+                                <div>
+                                    <p className="text-white font-medium">
+                                        Choose who is submitting
+                                    </p>
+                                    <p className="text-white/50 text-sm">
+                                        Select the player responsible for submitting the result.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="flex gap-3">
+                                <div
+                                    className="w-7 h-7 rounded-full bg-cyan/20 text-cyan flex items-center justify-center text-sm font-bold shrink-0">
+                                    2
+                                </div>
+                                <div>
+                                    <p className="text-white font-medium">
+                                        Select the game
+                                    </p>
+                                    <p className="text-white/50 text-sm">
+                                        Pick the game that was played.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="flex gap-3">
+                                <div
+                                    className="w-7 h-7 rounded-full bg-cyan/20 text-cyan flex items-center justify-center text-sm font-bold shrink-0">
+                                    3
+                                </div>
+                                <div>
+                                    <p className="text-white font-medium">
+                                        Add all participants
+                                    </p>
+                                    <p className="text-white/50 text-sm">
+                                        Everyone who joined the match should be selected.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="flex gap-3">
+                                <div
+                                    className="w-7 h-7 rounded-full bg-cyan/20 text-cyan flex items-center justify-center text-sm font-bold shrink-0">
+                                    4
+                                </div>
+                                <div>
+                                    <p className="text-white font-medium">
+                                        Mark the winner(s)
+                                    </p>
+                                    <p className="text-white/50 text-sm">
+                                        Select the player or team that won the match.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="flex gap-3">
+                                <div
+                                    className="w-7 h-7 rounded-full bg-cyan/20 text-cyan flex items-center justify-center text-sm font-bold shrink-0">
+                                    5
+                                </div>
+                                <div>
+                                    <p className="text-white font-medium">
+                                        Upload proof
+                                    </p>
+                                    <p className="text-white/50 text-sm">
+                                        Upload a screenshot, scoreboard, photo, or any valid evidence.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="flex gap-3">
+                                <div
+                                    className="w-7 h-7 rounded-full bg-cyan/20 text-cyan flex items-center justify-center text-sm font-bold shrink-0">
+                                    6
+                                </div>
+                                <div>
+                                    <p className="text-white font-medium">
+                                        Submit for review
+                                    </p>
+                                    <p className="text-white/50 text-sm">
+                                        Your match will be reviewed by an administrator before points are awarded.
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div className="rounded-xl border border-gold/20 bg-gold/5 p-4">
+                            <h3 className="font-game text-gold font-bold mb-2">
+                                💡 Quick Tips
+                            </h3>
+
+                            <ul className="space-y-2 text-sm text-white/70">
+                                <li>• Double-check the winner before submitting.</li>
+                                <li>• Make sure all participants are included.</li>
+                                <li>• Clear screenshots are easier to approve.</li>
+                                <li>• If a submission is incorrect, an admin may reject it.</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                )}
             </div>
 
             <form onSubmit={handleSubmit} className="card-cyan space-y-5">

@@ -20,6 +20,7 @@ import AdminSideQuests from "../pages/AdminSideQuests";
 import AdminPlayers from "../pages/AdminPlayers";
 import AdminGames from "../pages/AdminGames";
 import Games from "../pages/Games.jsx";
+import SeasonCalendar from "../pages/Calendar.jsx";
 
 function Public({children}) {
     return <MainLayout>{children}</MainLayout>;
@@ -49,6 +50,8 @@ export default function AppRoutes() {
             <Route path="/sidequests/:id" element={<Public><SideQuestDetail/></Public>}/>
             <Route path="/submit-sidequest" element={<Public><SubmitSideQuest/></Public>}/>
             <Route path="/games" element={<Public><Games/></Public>}/>
+            <Route path="/calendar" element={<Public><SeasonCalendar/></Public>}/>
+
             {/* ── Admin (login is public, everything else is protected) ── */}
             <Route path="/admin/login" element={<AdminLogin/>}/>
             <Route path="/admin" element={<AdminPage><AdminDashboard/></AdminPage>}/>

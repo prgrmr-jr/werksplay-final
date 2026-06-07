@@ -6,12 +6,10 @@ const NAV_LINKS = [
     {to: "/", label: "Home"},
     {to: "/leaderboard", label: "Leaderboard"},
     {to: "/players", label: "Players"},
-    {
-        to: "/games",
-        label: "Games",
-    },
+    {to: "/games", label: "Games"},
     {to: "/matches", label: "Matches"},
     {to: "/sidequests", label: "Side Quests"},
+    {to: "/calendar", label: "Calendar"},
 ];
 
 export default function MainLayout({children}) {
