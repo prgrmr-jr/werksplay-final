@@ -1,15 +1,16 @@
 # Indoor Club Leaderboard System
 
-A real-time indoor club leaderboard built with **Django DRF + Django Channels** (backend) and **React + Vite** (frontend).
+A real-time indoor club leaderboard built with **Django DRF + Django Channels** (backend) and **React + Vite** (
+frontend).
 
 ## Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Backend | Django 5, DRF, Django Channels, Daphne |
-| Real-time | WebSockets via Django Channels |
-| Database | SQLite (dev) → PostgreSQL (prod) |
-| Frontend | React 18, Vite, TailwindCSS, Axios, React Router |
+| Layer     | Technology                                       |
+|-----------|--------------------------------------------------|
+| Backend   | Django 5, DRF, Django Channels, Daphne           |
+| Real-time | WebSockets via Django Channels                   |
+| Database  | SQLite (dev) → PostgreSQL (prod)                 |
+| Frontend  | React 18, Vite, TailwindCSS, Axios, React Router |
 
 ## Quick Start
 

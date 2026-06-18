@@ -10,6 +10,7 @@ const NAV_LINKS = [
     {to: "/matches", label: "Matches"},
     {to: "/sidequests", label: "Side Quests"},
     {to: "/calendar", label: "Calendar"},
+    {to: "/tools", label: "Tools"},
 ];
 
 export default function MainLayout({children}) {

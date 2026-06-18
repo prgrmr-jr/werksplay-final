@@ -21,12 +21,14 @@ import AdminPlayers from "../pages/AdminPlayers";
 import AdminGames from "../pages/AdminGames";
 import Games from "../pages/Games.jsx";
 import SeasonCalendar from "../pages/Calendar.jsx";
+import ChessClock from "../pages/ChessClock.jsx";
+import Tools from "../pages/Tools.jsx";
+
 
 function Public({children}) {
     return <MainLayout>{children}</MainLayout>;
 }
 
-/** Wraps a page in both auth guard AND the admin sidebar layout */
 function AdminPage({children}) {
     return (
         <ProtectedRoute>
@@ -51,6 +53,8 @@ export default function AppRoutes() {
             <Route path="/submit-sidequest" element={<Public><SubmitSideQuest/></Public>}/>
             <Route path="/games" element={<Public><Games/></Public>}/>
             <Route path="/calendar" element={<Public><SeasonCalendar/></Public>}/>
+            <Route path="/tools" element={<Public><Tools/></Public>}/>
+            <Route path="/tools/chess-clock" element={<ChessClock/>}/>
 
             {/* ── Admin (login is public, everything else is protected) ── */}
             <Route path="/admin/login" element={<AdminLogin/>}/>
