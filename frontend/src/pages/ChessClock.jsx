@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
-import {Link} from 'react-router-dom'; // If using React Router
-// Or use <a href="/tools"> if not using React Router
+import {Link} from 'react-router-dom';
 
 const ChessClock = () => {
     // Preloader state
@@ -261,6 +260,8 @@ const ChessClock = () => {
 
     // Tap switch handlers
     const handleP1Click = useCallback(() => {
+        if (!runningRef.current) return;
+
         if (currentPlayerRef.current === 1) {
             switchSound();
             currentPlayerRef.current = 2;
@@ -271,6 +272,8 @@ const ChessClock = () => {
     }, [switchSound]);
 
     const handleP2Click = useCallback(() => {
+        if (!runningRef.current) return;
+
         if (currentPlayerRef.current === 2) {
             switchSound();
             currentPlayerRef.current = 1;
@@ -321,199 +324,432 @@ const ChessClock = () => {
             )}
 
             <style>{`
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-          font-family: Arial, sans-serif;
-          -webkit-tap-highlight-color: transparent;
-        }
-        body {
-          height: 100vh;
-          overflow: hidden;
-          background: #0a0a0a;
-          color: white;
-          touch-action: manipulation;
-        }
-        #preloader img {
-          animation: pulse 1.2s infinite;
-        }
-        @keyframes pulse {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.08); }
-          100% { transform: scale(1); }
-        }
-        .container {
-          height: 100vh;
-          display: flex;
-          flex-direction: column;
-          position: relative;
-        }
-        .clock {
-          flex: 1;
-          position: relative;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          overflow: hidden;
-          user-select: none;
-        }
-        .clock::before {
-          content: "";
-          position: absolute;
-          left: 0;
-          width: 100%;
-          height: var(--level, 100%);
-          transition: height 0.08s linear;
-        }
-        .bottom::before {
-          bottom: 0;
-          background: linear-gradient(180deg, #00c853, #2eea7a);
-        }
-        .top::before {
-          top: 0;
-          background: linear-gradient(180deg, #2962ff, #42a5f5);
-        }
-        .clock::after {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.15), transparent 40%);
-          opacity: 0.35;
-          animation: wave 2s infinite linear;
-        }
-        @keyframes wave {
-          0% { transform: translateX(0); }
-          50% { transform: translateX(-20px); }
-          100% { transform: translateX(0); }
-        }
-        .ui {
-          position: relative;
-          z-index: 2;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-        #p2 .ui {
-          transform: rotate(180deg);
-        }
-        .player {
-          font-size: 18px;
-          opacity: 0.85;
-          margin-bottom: 8px;
-        }
-        .time {
-          font-size: clamp(52px, 13vw, 92px);
-          font-weight: 900;
-          text-shadow: 0 0 20px rgba(0,0,0,0.35);
-        }
-        .badge {
-          margin-top: 10px;
-          padding: 8px 14px;
-          border-radius: 999px;
-          font-size: 12px;
-          font-weight: 900;
-          opacity: 0;
-          transition: opacity 0.2s;
-          letter-spacing: 1px;
-        }
-        #p1.active .badge {
-          opacity: 1;
-          background: #00e676;
-          color: black;
-          box-shadow: 0 0 18px #00e676;
-        }
-        #p2.active .badge {
-          opacity: 1;
-          background: #42a5f5;
-          color: black;
-          box-shadow: 0 0 18px #42a5f5;
-        }
-        .active {
-          box-shadow: inset 0 0 90px rgba(255,255,255,0.08);
-        }
-        .middle {
-          padding: 10px;
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-          background: #111;
-          border-top: 1px solid #222;
-          border-bottom: 1px solid #222;
-        }
-        .modes {
-          display: flex;
-          gap: 10px;
-          overflow: auto;
-        }
-        .mode {
-          padding: 10px 14px;
-          background: #222;
-          border-radius: 12px;
-          font-weight: 700;
-          color: #aaa;
-          white-space: nowrap;
-          cursor: pointer;
-        }
-        .activeMode {
-          background: #00e676;
-          color: black;
-        }
-        .controls {
-          display: flex;
-          gap: 10px;
-        }
-        button {
-          flex: 1;
-          padding: 14px;
-          border: none;
-          border-radius: 14px;
-          font-weight: 900;
-          font-size: 14px;
-          color: white;
-          cursor: pointer;
-        }
-        .start {
-          background: #00c853;
-        }
-        .reset {
-          background: #ff3d57;
-        }
-        /* Back Button Styles */
-        .back-button {
-          position: absolute;
-          top: 20px;
-          left: 20px;
-          z-index: 10;
-          background: rgba(0, 0, 0, 0.6);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 50%;
-          width: 48px;
-          height: 48px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          text-decoration: none;
-          font-size: 20px;
-          transition: all 0.3s ease;
-          cursor: pointer;
-        }
-        .back-button:hover {
-          background: rgba(255, 255, 255, 0.1);
-          transform: scale(1.05);
-        }
-        .back-button svg {
-          width: 24px;
-          height: 24px;
-          fill: none;
-          stroke: white;
-          stroke-width: 2;
-          stroke-linecap: round;
-          stroke-linejoin: round;
-        }
-      `}</style>
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                    font-family: Arial, sans-serif;
+                    -webkit-tap-highlight-color: transparent;
+                }
+                
+                body {
+                    height: 100vh;
+                    overflow: hidden;
+                    background: #0a0a0a;
+                    color: white;
+                    touch-action: manipulation;
+                }
+                
+                #preloader img {
+                    animation: pulse 1.2s infinite;
+                }
+                
+                @keyframes pulse {
+                    0% { transform: scale(1); }
+                    50% { transform: scale(1.08); }
+                    100% { transform: scale(1); }
+                }
+                
+                .container {
+                    height: 100vh;
+                    height: 100dvh;
+                    display: flex;
+                    flex-direction: column;
+                    position: relative;
+                    max-width: 100%;
+                    margin: 0 auto;
+                }
+                
+                .clock {
+                    flex: 1;
+                    position: relative;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    overflow: hidden;
+                    user-select: none;
+                    cursor: pointer;
+                    min-height: 0;
+                    width: 100%;
+                }
+                
+                .clock.disabled {
+                    cursor: not-allowed;
+                    opacity: 0.7;
+                }
+                
+                .clock::before {
+                    content: "";
+                    position: absolute;
+                    left: 0;
+                    width: 100%;
+                    height: var(--level, 100%);
+                    transition: height 0.08s linear;
+                }
+                
+                .bottom::before {
+                    bottom: 0;
+                    background: linear-gradient(180deg, #00c853, #2eea7a);
+                }
+                
+                .top::before {
+                    top: 0;
+                    background: linear-gradient(180deg, #2962ff, #42a5f5);
+                }
+                
+                .clock::after {
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    background: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.15), transparent 40%);
+                    opacity: 0.35;
+                    animation: wave 2s infinite linear;
+                }
+                
+                @keyframes wave {
+                    0% { transform: translateX(0); }
+                    50% { transform: translateX(-20px); }
+                    100% { transform: translateX(0); }
+                }
+                
+                .ui {
+                    position: relative;
+                    z-index: 2;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 10px;
+                    width: 100%;
+                    max-width: 600px;
+                }
+                
+                #p2 .ui {
+                    transform: rotate(180deg);
+                }
+                
+                .player {
+                    font-size: clamp(14px, 2.5vw, 24px);
+                    opacity: 0.85;
+                    margin-bottom: clamp(4px, 1vw, 12px);
+                    font-weight: 600;
+                    letter-spacing: 0.5px;
+                }
+                
+                .time {
+                    font-size: clamp(42px, 12vw, 120px);
+                    font-weight: 900;
+                    text-shadow: 0 0 20px rgba(0,0,0,0.35);
+                    line-height: 1;
+                    letter-spacing: 2px;
+                }
+                
+                .badge {
+                    margin-top: clamp(6px, 1.5vw, 14px);
+                    padding: clamp(4px, 0.8vw, 10px) clamp(10px, 2vw, 20px);
+                    border-radius: 999px;
+                    font-size: clamp(10px, 1.2vw, 16px);
+                    font-weight: 900;
+                    opacity: 0;
+                    transition: opacity 0.2s;
+                    letter-spacing: 1px;
+                    white-space: nowrap;
+                }
+                
+                #p1.active .badge {
+                    opacity: 1;
+                    background: #00e676;
+                    color: black;
+                    box-shadow: 0 0 18px #00e676;
+                }
+                
+                #p2.active .badge {
+                    opacity: 1;
+                    background: #42a5f5;
+                    color: black;
+                    box-shadow: 0 0 18px #42a5f5;
+                }
+                
+                .active {
+                    box-shadow: inset 0 0 90px rgba(255,255,255,0.08);
+                }
+                
+                .middle {
+                    padding: clamp(8px, 1.5vw, 16px);
+                    display: flex;
+                    flex-direction: column;
+                    gap: clamp(8px, 1.5vw, 14px);
+                    background: #111;
+                    border-top: 1px solid #222;
+                    border-bottom: 1px solid #222;
+                    flex-shrink: 0;
+                    width: 100%;
+                }
+                
+                .modes {
+                    display: flex;
+                    gap: clamp(6px, 1vw, 14px);
+                    overflow-x: auto;
+                    overflow-y: hidden;
+                    -webkit-overflow-scrolling: touch;
+                    scrollbar-width: none;
+                    padding: 2px 0;
+                    justify-content: center;
+                    flex-wrap: nowrap;
+                }
+                
+                .modes::-webkit-scrollbar {
+                    display: none;
+                }
+                
+                .mode {
+                    padding: clamp(8px, 1.2vw, 14px) clamp(12px, 2vw, 24px);
+                    background: #222;
+                    border-radius: 12px;
+                    font-weight: 700;
+                    color: #aaa;
+                    white-space: nowrap;
+                    cursor: pointer;
+                    font-size: clamp(12px, 1.2vw, 18px);
+                    transition: all 0.2s ease;
+                    flex-shrink: 0;
+                    touch-action: manipulation;
+                }
+                
+                .mode:active {
+                    transform: scale(0.95);
+                }
+                
+                .activeMode {
+                    background: #00e676;
+                    color: black;
+                }
+                
+                .controls {
+                    display: flex;
+                    gap: clamp(8px, 1.5vw, 14px);
+                    max-width: 600px;
+                    margin: 0 auto;
+                    width: 100%;
+                }
+                
+                button {
+                    flex: 1;
+                    padding: clamp(12px, 2vw, 18px);
+                    border: none;
+                    border-radius: 14px;
+                    font-weight: 900;
+                    font-size: clamp(13px, 1.5vw, 20px);
+                    color: white;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    touch-action: manipulation;
+                    min-height: clamp(44px, 7vw, 60px);
+                }
+                
+                button:active {
+                    transform: scale(0.95);
+                }
+                
+                .start {
+                    background: #00c853;
+                }
+                
+                .start:active {
+                    background: #00b34a;
+                }
+                
+                .reset {
+                    background: #ff3d57;
+                }
+                
+                .reset:active {
+                    background: #e6354e;
+                }
+                
+                /* Back Button */
+                .back-button {
+                    position: absolute;
+                    top: clamp(12px, 2.5vw, 24px);
+                    left: clamp(12px, 2.5vw, 24px);
+                    z-index: 10;
+                    background: rgba(0, 0, 0, 0.6);
+                    backdrop-filter: blur(10px);
+                    -webkit-backdrop-filter: blur(10px);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 50%;
+                    width: clamp(40px, 6vw, 56px);
+                    height: clamp(40px, 6vw, 56px);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    text-decoration: none;
+                    font-size: 20px;
+                    transition: all 0.3s ease;
+                    cursor: pointer;
+                    touch-action: manipulation;
+                }
+                
+                .back-button:active {
+                    transform: scale(0.9);
+                }
+                
+                .back-button svg {
+                    width: clamp(18px, 3vw, 28px);
+                    height: clamp(18px, 3vw, 28px);
+                    fill: none;
+                    stroke: white;
+                    stroke-width: 2;
+                    stroke-linecap: round;
+                    stroke-linejoin: round;
+                }
+                
+                /* Large screens */
+                @media (min-width: 1024px) {
+                    .container {
+                        max-width: 800px;
+                    }
+                    
+                    .time {
+                        font-size: clamp(80px, 10vw, 120px);
+                    }
+                    
+                    .ui {
+                        max-width: 700px;
+                    }
+                    
+                    .controls {
+                        max-width: 700px;
+                    }
+                }
+                
+                /* Very Large screens */
+                @media (min-width: 1440px) {
+                    .container {
+                        max-width: 1000px;
+                    }
+                    
+                    .time {
+                        font-size: clamp(100px, 12vw, 140px);
+                    }
+                    
+                    .ui {
+                        max-width: 800px;
+                    }
+                    
+                    .controls {
+                        max-width: 800px;
+                    }
+                }
+                
+                /* Very Small Screens */
+                @media (max-width: 480px) {
+                    .time {
+                        font-size: clamp(36px, 12vw, 48px);
+                    }
+                    
+                    .player {
+                        font-size: clamp(12px, 2.2vw, 14px);
+                    }
+                    
+                    .mode {
+                        font-size: clamp(11px, 2vw, 12px);
+                        padding: clamp(6px, 1.5vw, 8px) clamp(10px, 2vw, 12px);
+                    }
+                    
+                    button {
+                        font-size: clamp(12px, 2.2vw, 13px);
+                        padding: clamp(10px, 2vw, 12px);
+                        min-height: clamp(40px, 8vw, 44px);
+                    }
+                    
+                    .badge {
+                        font-size: clamp(9px, 1.8vw, 10px);
+                        padding: clamp(3px, 0.8vw, 4px) clamp(8px, 1.5vw, 10px);
+                    }
+                    
+                    .controls {
+                        max-width: 100%;
+                    }
+                }
+                
+                /* Extra Small Screens (e.g., iPhone SE) */
+                @media (max-width: 380px) {
+                    .time {
+                        font-size: clamp(30px, 10vw, 36px);
+                    }
+                    
+                    .player {
+                        font-size: 11px;
+                    }
+                    
+                    .mode {
+                        font-size: 10px;
+                        padding: 6px 8px;
+                    }
+                    
+                    button {
+                        font-size: 11px;
+                        padding: 8px;
+                        min-height: 36px;
+                    }
+                    
+                    .middle {
+                        padding: 6px;
+                        gap: 6px;
+                    }
+                    
+                    .controls {
+                        gap: 6px;
+                    }
+                    
+                    .modes {
+                        gap: 4px;
+                    }
+                }
+                
+                /* Landscape phone orientation */
+                @media (max-height: 500px) and (orientation: landscape) {
+                    .time {
+                        font-size: clamp(28px, 8vh, 40px);
+                    }
+                    
+                    .player {
+                        font-size: clamp(10px, 2vh, 12px);
+                        margin-bottom: 2px;
+                    }
+                    
+                    .badge {
+                        margin-top: 3px;
+                        padding: 2px 8px;
+                        font-size: 8px;
+                    }
+                    
+                    .middle {
+                        padding: 4px 8px;
+                        gap: 4px;
+                    }
+                    
+                    .mode {
+                        padding: 4px 8px;
+                        font-size: 10px;
+                    }
+                    
+                    button {
+                        padding: 6px 10px;
+                        font-size: 10px;
+                        min-height: 30px;
+                    }
+                    
+                    .ui {
+                        padding: 4px;
+                    }
+                    
+                    .controls {
+                        max-width: 100%;
+                    }
+                }
+            `}</style>
 
             <div className="container">
                 {/* Back Button */}
@@ -528,7 +764,7 @@ const ChessClock = () => {
                 <div
                     id="p2"
                     ref={p2DivRef}
-                    className="clock top"
+                    className={`clock top ${!running ? 'disabled' : ''}`}
                     onClick={handleP2Click}
                 >
                     <div className="ui">
@@ -568,7 +804,7 @@ const ChessClock = () => {
                 <div
                     id="p1"
                     ref={p1DivRef}
-                    className="clock bottom active"
+                    className={`clock bottom active ${!running ? 'disabled' : ''}`}
                     onClick={handleP1Click}
                 >
                     <div className="ui">

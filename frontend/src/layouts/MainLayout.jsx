@@ -6,11 +6,11 @@ const NAV_LINKS = [
     {to: "/", label: "Home"},
     {to: "/leaderboard", label: "Leaderboard"},
     {to: "/players", label: "Players"},
-    {to: "/games", label: "Games"},
-    {to: "/matches", label: "Matches"},
-    {to: "/sidequests", label: "Side Quests"},
-    {to: "/calendar", label: "Calendar"},
-    {to: "/tools", label: "Tools"},
+    // {to: "/games", label: "Games"},
+    // {to: "/matches", label: "Matches"},
+    // {to: "/sidequests", label: "Side Quests"},
+    // {to: "/calendar", label: "Calendar"},
+    // {to: "/tools", label: "Tools"},
 ];
 
 export default function MainLayout({children}) {
@@ -53,11 +53,11 @@ export default function MainLayout({children}) {
                     </nav>
 
                     {/* CTA buttons */}
-                    <div className="hidden md:flex items-center gap-2">
-                        <Link to="/submit-match" className="btn-purple text-xs py-2 px-3">+ Match</Link>
-                        <Link to="/submit-sidequest" className="btn-cyan text-xs py-2 px-3">+ Quest</Link>
-                        {/*<Link to="/admin"            className="text-white/40 hover:text-white text-xs px-3 py-2 transition">Admin</Link>*/}
-                    </div>
+                    {/*<div className="hidden md:flex items-center gap-2">*/}
+                    {/*    <Link to="/submit-match" className="btn-purple text-xs py-2 px-3">+ Match</Link>*/}
+                    {/*    <Link to="/submit-sidequest" className="btn-cyan text-xs py-2 px-3">+ Quest</Link>*/}
+                    {/*    /!*<Link to="/admin"            className="text-white/40 hover:text-white text-xs px-3 py-2 transition">Admin</Link>*!/*/}
+                    {/*</div>*/}
 
                     {/* Mobile hamburger */}
                     <button
@@ -85,12 +85,12 @@ export default function MainLayout({children}) {
                                 {label}
                             </NavLink>
                         ))}
-                        <div className="flex gap-2 pt-2">
-                            <Link to="/submit-match" onClick={() => setMenuOpen(false)}
-                                  className="btn-purple flex-1 justify-center text-xs">+ Match</Link>
-                            <Link to="/submit-sidequest" onClick={() => setMenuOpen(false)}
-                                  className="btn-cyan flex-1 justify-center text-xs">+ Quest</Link>
-                        </div>
+                        {/*<div className="flex gap-2 pt-2">*/}
+                        {/*    <Link to="/submit-match" onClick={() => setMenuOpen(false)}*/}
+                        {/*          className="btn-purple flex-1 justify-center text-xs">+ Match</Link>*/}
+                        {/*    <Link to="/submit-sidequest" onClick={() => setMenuOpen(false)}*/}
+                        {/*          className="btn-cyan flex-1 justify-center text-xs">+ Quest</Link>*/}
+                        {/*</div>*/}
                     </div>
                 )}
             </header>
