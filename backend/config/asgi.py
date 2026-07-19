@@ -10,6 +10,7 @@ django_asgi_app = get_asgi_application()
 from apps.matches.routing import match_websocket_urlpatterns
 from apps.sidequests.routing import sidequest_websocket_urlpatterns
 from apps.notifications.routing import notification_websocket_urlpatterns
+from apps.tournaments.routing import tournament_chat_urlpatterns
 
 application = ProtocolTypeRouter(
     {
@@ -19,6 +20,7 @@ application = ProtocolTypeRouter(
                 notification_websocket_urlpatterns
                 + match_websocket_urlpatterns
                 + sidequest_websocket_urlpatterns
+                + tournament_chat_urlpatterns
             )
         ),
     }

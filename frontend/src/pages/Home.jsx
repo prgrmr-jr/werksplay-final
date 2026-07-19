@@ -1,214 +1,51 @@
-import {Link} from "react-router-dom";
-import {useLeaderboard} from "../hooks/useLeaderboard";
-import {useMatches} from "../hooks/useMatches";
-import {useSideQuests} from "../hooks/useSideQuests";
-import Spinner from "../components/common/Spinner";
-import MatchCard from "../components/matches/MatchCard";
-import SideQuestCard from "../components/sidequests/SideQuestCard";
+import { Link } from "react-router-dom";
+import { Zap } from "lucide-react";
 
 export default function Home() {
-    const {data: lb, loading: lbLoading} = useLeaderboard();
-    const {data: matches, loading: mLoad} = useMatches("Approved");
-    const {data: quests, loading: qLoad} = useSideQuests();
+  return (
+      <main className="relative flex min-h-screen items-center justify-center overflow-hidden text-white">
+        {/*/!* Animated Background *!/*/}
+        {/*<div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_top_left,rgba(0,229,255,.18),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(255,193,7,.14),transparent_35%)]" />*/}
 
-    // Only show players with activity
-    const top3 = lb
-        .filter(
-            (player) =>
-                player.total_points > 0 ||
-                player.matches_played > 0 ||
-                player.wins > 0 ||
-                player.losses > 0
-        )
-        .slice(0, 3);
+        {/*/!* Floating Glow Effects *!/*/}
+        {/*<div className="absolute -top-24 left-10 h-72 w-72 animate-pulse rounded-full bg-cyan-500/20 blur-3xl" />*/}
+        {/*<div className="absolute bottom-0 right-10 h-80 w-80 animate-pulse rounded-full bg-yellow-400/20 blur-3xl [animation-delay:1.5s]" />*/}
 
-// Only show actual approved matches with participants
-    const latest3m = matches
-        .filter(
-            (match) =>
-                match.participants &&
-                match.participants.length > 0
-        )
-        .slice(0, 3);
+        {/* Grid Overlay */}
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(rgba(255,255,255,.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
-// Only show completed / approved side quests
-    const latest3q = quests
-        .filter(
-            (quest) =>
-                quest.status === "Completed" ||
-                quest.status === "Approved"
-        )
-        .slice(0, 3);
+        <div className="mx-auto flex max-w-5xl flex-col items-center justify-center px-6 text-center">
+          {/* Badge */}
+          <span className="inline-flex animate-bounce items-center gap-2 rounded-full border border-green-400/40 bg-green-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[.3em] text-green-400 shadow-[0_0_20px_rgba(34,197,94,.35)]">
+          <Zap size={14} />
+          Tournament Registration Open
+        </span>
 
-    return (
-        <div className="space-y-14">
-            {/* Hero */}
-            <section className="text-center py-10">
-                <h1 className="font-game font-bold text-4xl md:text-6xl text-white mb-2">
-                    WERKS <span className="text-cyan text-glow-cyan">PLAY</span>
-                </h1>
+          {/* Heading */}
+          <h1 className="mt-8 font-game text-5xl uppercase leading-tight sm:text-7xl lg:text-8xl">
+            Ready to
+            <span className="block animate-pulse bg-gradient-to-r from-cyan-400 via-white to-yellow-400 bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(34,211,238,.8)]">
+            Dominate the Arena?
+          </span>
+          </h1>
 
-                <h2 className="font-game font-bold text-2xl md:text-3xl text-gold text-glow-gold mb-4">
-                    LEADERBOARD
-                </h2>
+          {/* Description */}
+          <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-white/70">
+            Register your team, compete in official esports tournaments, and
+            battle the best players in Mobile Legends, Dota 2, and Valorant.
+          </p>
 
-                <p className="text-white/50 text-sm tracking-[0.2em] uppercase mb-8">
-                    Track rankings, match results, and achievements.
-                </p>
-
-                <div className="flex flex-wrap justify-center gap-3">
-                    <Link to="/submit-match" className="btn-gold">
-                        Submit Match
-                    </Link>
-
-                    <Link to="/submit-sidequest" className="btn-cyan">
-                        Submit Side Quest
-                    </Link>
-
-                    <Link to="/leaderboard" className="btn-purple">
-                        View Leaderboard
-                    </Link>
-                </div>
-            </section>
-
-            {/* Top Rankings */}
-            <section>
-                <h2 className="font-game font-bold text-xl text-white uppercase tracking-wider mb-5">
-                    <span className="text-cyan">Top Rankings</span>
-                </h2>
-
-                {lbLoading ? (
-                    <Spinner/>
-                ) : top3.length === 0 ? (
-                    <div className="card-cyan text-center py-10">
-                        <p className="text-white/40">
-                            No rankings available yet.
-                        </p>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        {top3.map((row) => (
-                            <Link
-                                key={row.player_id}
-                                to={`/players/${row.player_id}`}
-                                className={`card border text-center hover:scale-[1.02] transition-all duration-200 ${
-                                    row.rank === 1
-                                        ? "border-gold/40 bg-gold/5"
-                                        : row.rank === 2
-                                            ? "border-white/20 bg-white/5"
-                                            : "border-orange-500/30 bg-orange-900/10"
-                                }`}
-                            >
-                                <div className="font-game text-white/40 text-xs tracking-widest mb-3">
-                                    RANK #{row.rank}
-                                </div>
-
-                                <div
-                                    className="w-16 h-16 rounded-full overflow-hidden border-2 border-white/20 mx-auto mb-3">
-                                    {row.photo ? (
-                                        <img
-                                            src={row.photo}
-                                            alt={row.nickname}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    ) : (
-                                        <div
-                                            className="w-full h-full bg-navy-600 flex items-center justify-center text-white/40 font-bold font-game text-xl">
-                                            {row.nickname?.[0]}
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="font-game font-bold text-white text-lg">
-                                    {row.nickname}
-                                </div>
-
-                                <div className="text-gold font-game font-bold text-2xl mt-1">
-                                    {row.total_points.toLocaleString()}
-                                </div>
-
-                                <div className="text-white/40 text-xs uppercase tracking-widest mt-1">
-                                    Points
-                                </div>
-
-                                <div className="flex justify-center gap-4 mt-3 text-xs">
-                        <span className="text-green-400">
-                            W: {row.wins}
-                        </span>
-
-                                    <span className="text-red-400">
-                            L: {row.losses}
-                        </span>
-                                </div>
-                            </Link>
-                        ))}
-                    </div>
-                )}
-            </section>
-
-            {/* Recent Matches */}
-            <section>
-                <div className="flex items-center justify-between mb-5">
-                    <h2 className="font-game font-bold text-xl text-white uppercase tracking-wider">
-                        <span className="text-cyan">Recent Matches</span>
-                    </h2>
-
-                    <Link
-                        to="/matches"
-                        className="text-cyan text-xs uppercase tracking-wider hover:underline"
-                    >
-                        View All
-                    </Link>
-                </div>
-
-                {mLoad ? (
-                    <Spinner/>
-                ) : latest3m.length === 0 ? (
-                    <div className="card-cyan text-center py-10">
-                        <p className="text-white/40">
-                            No matches submitted yet.
-                        </p>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {latest3m.map((m) => (
-                            <MatchCard key={m.id} match={m}/>
-                        ))}
-                    </div>
-                )}
-            </section>
-
-            {/* Side Quests */}
-            <section>
-                <div className="flex items-center justify-between mb-5">
-                    <h2 className="font-game font-bold text-xl text-white uppercase tracking-wider">
-                        <span className="text-purple">Side Quests</span>
-                    </h2>
-
-                    <Link
-                        to="/sidequests"
-                        className="text-purple text-xs uppercase tracking-wider hover:underline"
-                    >
-                        View All
-                    </Link>
-                </div>
-
-                {qLoad ? (
-                    <Spinner/>
-                ) : latest3q.length === 0 ? (
-                    <div className="card-cyan text-center py-10">
-                        <p className="text-white/40">
-                            No side quests completed yet.
-                        </p>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {latest3q.map((q) => (
-                            <SideQuestCard key={q.id} quest={q}/>
-                        ))}
-                    </div>
-                )}
-            </section>
+          {/* CTA */}
+          <div className="mt-10">
+            <Link
+                to="/tournaments"
+                className="group relative inline-flex overflow-hidden rounded-xl bg-yellow-400 px-8 py-4 font-game uppercase tracking-wider text-black transition duration-300 hover:scale-110 hover:shadow-[0_0_35px_rgba(250,204,21,.8)]"
+            >
+              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/50 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+              <span className="relative">View Tournaments</span>
+            </Link>
+          </div>
         </div>
-    );
+      </main>
+  );
 }

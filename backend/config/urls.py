@@ -14,6 +14,7 @@ urlpatterns = [
     path("api/leaderboard/", include("apps.leaderboard.urls")),
     path("api/comments/",    include("apps.comments.urls")),
     path("api/accounts/",    include("apps.accounts.urls")),
+    path("api/tournaments/", include("apps.tournaments.urls")),
 ]
 
 if settings.DEBUG:

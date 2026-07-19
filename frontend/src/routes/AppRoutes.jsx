@@ -20,6 +20,11 @@ import AdminSideQuests from "../pages/AdminSideQuests";
 import AdminPlayers from "../pages/AdminPlayers";
 import AdminGames from "../pages/AdminGames";
 import Games from "../pages/Games.jsx";
+import Tournaments from "../pages/Tournaments";
+import TournamentDetail from "../pages/TournamentDetail";
+import TournamentRegister from "../pages/TournamentRegister";
+import AdminTournaments from "../pages/AdminTournaments";
+import AdminTournamentDetail from "../pages/AdminTournamentDetail";
 
 function Public({children}) {
     return <MainLayout>{children}</MainLayout>;
@@ -49,6 +54,9 @@ export default function AppRoutes() {
             <Route path="/sidequests/:id" element={<Public><SideQuestDetail/></Public>}/>
             <Route path="/submit-sidequest" element={<Public><SubmitSideQuest/></Public>}/>
             <Route path="/games" element={<Public><Games/></Public>}/>
+            <Route path="/tournaments" element={<Public><Tournaments/></Public>}/>
+            <Route path="/tournaments/:id" element={<Public><TournamentDetail/></Public>}/>
+            <Route path="/tournaments/:id/register" element={<Public><TournamentRegister/></Public>}/>
             {/* ── Admin (login is public, everything else is protected) ── */}
             <Route path="/admin/login" element={<AdminLogin/>}/>
             <Route path="/admin" element={<AdminPage><AdminDashboard/></AdminPage>}/>
@@ -56,6 +64,8 @@ export default function AppRoutes() {
             <Route path="/admin/sidequests" element={<AdminPage><AdminSideQuests/></AdminPage>}/>
             <Route path="/admin/games" element={<AdminPage><AdminGames/></AdminPage>}/>
             <Route path="/players/manage" element={<AdminPage><AdminPlayers/></AdminPage>}/>
+            <Route path="/admin/tournaments" element={<AdminPage><AdminTournaments/></AdminPage>}/>
+            <Route path="/admin/tournaments/:id" element={<AdminPage><AdminTournamentDetail/></AdminPage>}/>
 
         </Routes>
     );

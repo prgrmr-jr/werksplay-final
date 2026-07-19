@@ -6,6 +6,7 @@ const ADMIN_LINKS = [
     {to: "/admin/matches", label: "Matches"},
     {to: "/admin/sidequests", label: "Side Quests"},
     {to: "/admin/games", label: "Games"},
+    {to: "/admin/tournaments", label: "Tournaments"},
     {to: "/players/manage", label: "Players"},
 ];
 
