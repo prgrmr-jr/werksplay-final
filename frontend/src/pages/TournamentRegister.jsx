@@ -14,6 +14,33 @@ import { getTournament, registerTeam }  from "../api/tournaments";
 import { getAllActivePlayers }          from "../api/players";
 import Spinner                          from "../components/common/Spinner";
 
+function getErrorMessage(err) {
+  const data = err.response?.data;
+
+  if (data && typeof data === "object") {
+    return Object.entries(data)
+        .flatMap(([field, value]) => {
+          const messages = Array.isArray(value) ? value : [value];
+          return messages.map((message) =>
+              field === "non_field_errors" || field === "detail"
+                  ? String(message)
+                  : `${field}: ${message}`
+          );
+        })
+        .join(" ");
+  }
+
+  if (typeof data === "string") {
+    if (data.trim().startsWith("<!DOCTYPE") || data.trim().startsWith("<html")) {
+      return "Registration failed. Please check if the team name is already taken and try again.";
+    }
+
+    return data;
+  }
+
+  return "Something went wrong. Please try again.";
+}
+
 export default function TournamentRegister() {
   const { id }   = useParams();
   const navigate = useNavigate();
@@ -81,13 +108,7 @@ export default function TournamentRegister() {
       await registerTeam(id, fd);
       navigate(`/tournaments/${id}`);
     } catch (err) {
-      const data = err.response?.data;
-      if (data && typeof data === "object") {
-        const msgs = Object.entries(data).flatMap(([, v]) => Array.isArray(v) ? v : [v]).join(" ");
-        setError(msgs);
-      } else {
-        setError(data ?? "Something went wrong.");
-      }
+      setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }

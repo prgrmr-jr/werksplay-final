@@ -26,6 +26,56 @@ class TournamentTeamSerializer(serializers.ModelSerializer):
         return obj.members.count()
 
 
+# class TournamentTeamCreateSerializer(serializers.ModelSerializer):
+#     player_ids = serializers.ListField(child=serializers.IntegerField(), write_only=True)
+#
+#     class Meta:
+#         model  = TournamentTeam
+#         fields = ["name", "photo", "player_ids"]
+#
+#     def validate_photo(self, value):
+#         if value and value.size > MAX_PHOTO_BYTES:
+#             mb = value.size / (1024 * 1024)
+#             raise serializers.ValidationError(
+#                 f"Photo is too large ({mb:.1f} MB). Maximum allowed is 5 MB."
+#             )
+#         return value
+#
+#     def validate(self, data):
+#         tournament = self.context["tournament"]
+#         player_ids = data["player_ids"]
+#
+#         if len(player_ids) < 1:
+#             raise serializers.ValidationError("A team must have at least 1 player.")
+#
+#         if len(player_ids) > tournament.team_size:
+#             raise serializers.ValidationError(
+#                 f"Maximum {tournament.team_size} players per team. You selected {len(player_ids)}."
+#             )
+#
+#         if len(player_ids) != len(set(player_ids)):
+#             raise serializers.ValidationError("Duplicate players are not allowed.")
+#
+#         existing = TournamentTeamMember.objects.filter(
+#             team__tournament=tournament,
+#             player_id__in=player_ids,
+#         ).select_related("player", "team")
+#
+#         if existing.exists():
+#             conflicts = [f"{m.player.nickname} (already in '{m.team.name}')" for m in existing]
+#             raise serializers.ValidationError(
+#                 f"The following players are already in a team: {', '.join(conflicts)}"
+#             )
+#
+#         return data
+#
+#     def create(self, validated_data):
+#         player_ids = validated_data.pop("player_ids")
+#         team       = TournamentTeam.objects.create(**validated_data)
+#         for pid in player_ids:
+#             TournamentTeamMember.objects.create(team=team, player_id=pid)
+#         return team
+
 class TournamentTeamCreateSerializer(serializers.ModelSerializer):
     player_ids = serializers.ListField(child=serializers.IntegerField(), write_only=True)
 
@@ -44,6 +94,15 @@ class TournamentTeamCreateSerializer(serializers.ModelSerializer):
     def validate(self, data):
         tournament = self.context["tournament"]
         player_ids = data["player_ids"]
+        team_name = data.get("name", "").strip()
+
+        if not team_name:
+            raise serializers.ValidationError({"name": "Team name is required."})
+
+        if TournamentTeam.objects.filter(tournament=tournament, name__iexact=team_name).exists():
+            raise serializers.ValidationError({
+                "name": "A team with this name is already registered in this tournament."
+            })
 
         if len(player_ids) < 1:
             raise serializers.ValidationError("A team must have at least 1 player.")
@@ -67,6 +126,7 @@ class TournamentTeamCreateSerializer(serializers.ModelSerializer):
                 f"The following players are already in a team: {', '.join(conflicts)}"
             )
 
+        data["name"] = team_name
         return data
 
     def create(self, validated_data):
@@ -75,7 +135,6 @@ class TournamentTeamCreateSerializer(serializers.ModelSerializer):
         for pid in player_ids:
             TournamentTeamMember.objects.create(team=team, player_id=pid)
         return team
-
 
 class TournamentMatchSerializer(serializers.ModelSerializer):
     team_a_detail = TournamentTeamSerializer(source="team_a", read_only=True)

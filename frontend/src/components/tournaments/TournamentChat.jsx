@@ -12,6 +12,14 @@ function formatTime(iso) {
   });
 }
 
+function appendMessageOnce(prev, message) {
+  if (message.id && prev.some((existing) => existing.id === message.id)) {
+    return prev;
+  }
+
+  return [...prev, message];
+}
+
 export default function TournamentChat({ tournamentId }) {
   const { user }                      = useAuth();
   const isAdminUser                   = user && user.is_staff;
@@ -26,6 +34,7 @@ export default function TournamentChat({ tournamentId }) {
   useEffect(() => {
     let ws;
     let retryTimer;
+    let shouldReconnect = true;
 
     const connect = () => {
       ws = new WebSocket(`${WS_BASE}/ws/tournaments/${tournamentId}/chat/`);
@@ -34,19 +43,35 @@ export default function TournamentChat({ tournamentId }) {
       ws.onopen  = () => setConnected(true);
       ws.onclose = () => {
         setConnected(false);
-        retryTimer = setTimeout(connect, 3000);
+
+        if (shouldReconnect) {
+          retryTimer = setTimeout(connect, 3000);
+        }
       };
       ws.onmessage = (e) => {
         try {
           const data = JSON.parse(e.data);
-          if (data.type === "history")      setMessages(data.messages);
-          else if (data.type === "message") setMessages((prev) => [...prev, data]);
+          if (data.type === "history") {
+            setMessages(data.messages);
+          } else if (data.type === "message") {
+            setMessages((prev) => appendMessageOnce(prev, data));
+          }
         } catch {}
       };
     };
 
     connect();
-    return () => { clearTimeout(retryTimer); ws?.close(); };
+
+    return () => {
+      shouldReconnect = false;
+      clearTimeout(retryTimer);
+
+      if (wsRef.current === ws) {
+        wsRef.current = null;
+      }
+
+      ws?.close();
+    };
   }, [tournamentId]);
 
   // Auto-scroll on new messages
@@ -71,16 +96,15 @@ export default function TournamentChat({ tournamentId }) {
     }));
     setText("");
   };
-
   return (
-    <div className="card-cyan flex h-[460px] flex-col sm:h-[520px]">
-      {/* Header */}
-      <div className="mb-3 flex shrink-0 items-center justify-between border-b border-white/10 pb-3">
-        <h3 className="flex items-center gap-2 font-game text-sm font-bold uppercase tracking-wider text-white">
-          <ChatBubbleLeftRightIcon className="h-4 w-4 text-cyan" />
-          Chat
-          <span className="text-xs font-normal text-white/30">({messages.length})</span>
-        </h3>
+      <div className="card-cyan flex h-[460px] flex-col sm:h-[520px]">
+        {/* Header */}
+        <div className="mb-3 flex shrink-0 items-center justify-between border-b border-white/10 pb-3">
+          <h3 className="flex items-center gap-2 font-game text-sm font-bold uppercase tracking-wider text-white">
+            <ChatBubbleLeftRightIcon className="h-4 w-4 text-cyan" />
+            Chat
+            <span className="text-xs font-normal text-white/30">({messages.length})</span>
+          </h3>
         <div className="flex items-center gap-1.5">
           <span className={`w-2 h-2 rounded-full ${connected ? "bg-green-400" : "bg-red-400 animate-pulse"}`} />
           <span className={`text-xs font-game ${connected ? "text-green-400" : "text-red-400"}`}>

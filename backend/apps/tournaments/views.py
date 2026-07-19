@@ -1,3 +1,4 @@
+from django.db import IntegrityError
 from django.utils import timezone
 import pytz
 from rest_framework import generics, status
@@ -46,6 +47,35 @@ class TournamentDetailView(generics.RetrieveUpdateAPIView):
 
 # ── Team registration (public) ────────────────────────────────────────────────
 
+# @api_view(["POST"])
+# @permission_classes([AllowAny])
+# def register_team_view(request, pk):
+#     try:
+#         tournament = Tournament.objects.get(pk=pk)
+#     except Tournament.DoesNotExist:
+#         return Response({"detail": "Tournament not found."}, status=status.HTTP_404_NOT_FOUND)
+#
+#     if tournament.status == "Completed":
+#         return Response(
+#             {"detail": "This tournament has already ended."},
+#             status=status.HTTP_400_BAD_REQUEST,
+#         )
+#
+#     # Registration deadline check
+#     if tournament.registration_deadline and timezone.now() > tournament.registration_deadline:
+#         deadline_str = tournament.registration_deadline.astimezone(MANILA_TZ).strftime("%b %d at %-I:%M %p")
+#         return Response(
+#             {"detail": f"Team registration closed. Deadline was {deadline_str} (Manila time)."},
+#             status=status.HTTP_400_BAD_REQUEST,
+#         )
+#
+#     serializer = TournamentTeamCreateSerializer(
+#         data=request.data,
+#         context={"tournament": tournament, "request": request},
+#     )
+#     serializer.is_valid(raise_exception=True)
+#     team = serializer.save(tournament=tournament)
+#     return Response(TournamentTeamSerializer(team).data, status=status.HTTP_201_CREATED)
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def register_team_view(request, pk):
@@ -73,9 +103,16 @@ def register_team_view(request, pk):
         context={"tournament": tournament, "request": request},
     )
     serializer.is_valid(raise_exception=True)
-    team = serializer.save(tournament=tournament)
-    return Response(TournamentTeamSerializer(team).data, status=status.HTTP_201_CREATED)
 
+    try:
+        team = serializer.save(tournament=tournament)
+    except IntegrityError:
+        return Response(
+            {"name": ["A team with this name is already registered in this tournament."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    return Response(TournamentTeamSerializer(team).data, status=status.HTTP_201_CREATED)
 
 # ── Public: delete team ───────────────────────────────────────────────────────
 
