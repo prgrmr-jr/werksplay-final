@@ -122,13 +122,7 @@ import logo from "../public/werksplay-logo.png";
 const NAV_LINKS = [
     {to: "/", label: "Home"},
     {to: "/tournaments", label: "Tournaments"},
-    // {to: "/leaderboard", label: "Leaderboard"},
-    // {to: "/players", label: "Players"},
-    // {to: "/games", label: "Games"},
-    // {to: "/matches", label: "Matches"},
-    // {to: "/sidequests", label: "Side Quests"},
-    // {to: "/calendar", label: "Calendar"},
-    // {to: "/tools", label: "Tools"},
+    {to: "/live", label: "Live"},
 ];
 
 export default function MainLayout({children}) {
@@ -169,13 +163,6 @@ export default function MainLayout({children}) {
                             </NavLink>
                         ))}
                     </nav>
-
-                    {/* CTA buttons */}
-                    {/*<div className="hidden md:flex items-center gap-2">*/}
-                    {/*    <Link to="/submit-match" className="btn-purple text-xs py-2 px-3">+ Match</Link>*/}
-                    {/*    <Link to="/submit-sidequest" className="btn-cyan text-xs py-2 px-3">+ Quest</Link>*/}
-                    {/*    /!*<Link to="/admin"            className="text-white/40 hover:text-white text-xs px-3 py-2 transition">Admin</Link>*!/*/}
-                    {/*</div>*/}
 
                     {/* Mobile hamburger */}
                     <button

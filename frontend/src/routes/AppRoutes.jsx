@@ -25,6 +25,7 @@ import TournamentDetail from "../pages/TournamentDetail";
 import TournamentRegister from "../pages/TournamentRegister";
 import AdminTournaments from "../pages/AdminTournaments";
 import AdminTournamentDetail from "../pages/AdminTournamentDetail";
+import LiveStream from "../pages/LiveStream.jsx";
 
 function Public({children}) {
     return <MainLayout>{children}</MainLayout>;
@@ -47,12 +48,13 @@ export default function AppRoutes() {
             <Route path="/leaderboard" element={<Public><Leaderboard/></Public>}/>
             <Route path="/players" element={<Public><Players/></Public>}/>
             <Route path="/players/:id" element={<Public><PlayerProfile/></Public>}/>
-            <Route path="/matches" element={<Public><Matches/></Public>}/>
-            <Route path="/matches/:id" element={<Public><MatchDetail/></Public>}/>
-            <Route path="/submit-match" element={<Public><SubmitMatch/></Public>}/>
-            <Route path="/sidequests" element={<Public><SideQuests/></Public>}/>
-            <Route path="/sidequests/:id" element={<Public><SideQuestDetail/></Public>}/>
-            <Route path="/submit-sidequest" element={<Public><SubmitSideQuest/></Public>}/>
+            <Route path="/live" element={<Public><LiveStream/></Public>}/>
+            {/*<Route path="/matches" element={<Public><Matches/></Public>}/>*/}
+            {/*<Route path="/matches/:id" element={<Public><MatchDetail/></Public>}/>*/}
+            {/*<Route path="/submit-match" element={<Public><SubmitMatch/></Public>}/>*/}
+            {/*<Route path="/sidequests" element={<Public><SideQuests/></Public>}/>*/}
+            {/*<Route path="/sidequests/:id" element={<Public><SideQuestDetail/></Public>}/>*/}
+            {/*<Route path="/submit-sidequest" element={<Public><SubmitSideQuest/></Public>}/>*/}
             <Route path="/games" element={<Public><Games/></Public>}/>
             <Route path="/tournaments" element={<Public><Tournaments/></Public>}/>
             <Route path="/tournaments/:id" element={<Public><TournamentDetail/></Public>}/>
